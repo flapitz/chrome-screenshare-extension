@@ -2,6 +2,9 @@
 chrome.runtime.onMessageExternal.addListener(function (message, sender, callback) {
     switch(message.type) {
         case 'getScreen':
+            var tab = sender.tab;
+            // tab.url = "https://localhost:8888";
+            tab.url = sender.url;
             var pending = chrome.desktopCapture.chooseDesktopMedia(message.options || ['screen', 'window'],
                                                                    sender.tab, function (streamid) {
                 // communicate this string to the app so it can call getUserMedia with it
@@ -24,6 +27,9 @@ chrome.runtime.onConnect.addListener(function (channel) {
     channel.onMessage.addListener(function (message) {
         switch(message.type) {
         case 'getScreen':
+            var tab = channel.sender.tab;
+            // tab.url = "https://localhost:8888";
+            tab.url = channel.sender.url;
             var pending = chrome.desktopCapture.chooseDesktopMedia(message.options || ['screen', 'window'],
                                                                    channel.sender.tab, function (streamid) {
                 // communicate this string to the app so it can call getUserMedia with it
